@@ -39,6 +39,36 @@ Retour dans ``psql`` pour le reste du traitement ::
         ) as sub
         WHERE NOT ST_Intersects(sub.bbox, geom);
 
+Intégration des données sur les lieux de culte
+----------------------------------------------
+
+Données OpenStreetMap obtenues avec la XAPI :
+http://api.openstreetmap.fr/xapi/api/0.6/?*[amenity=place_of_worship][bbox=5.34,43.16,5.43,43.55]
+
+Intégration dans PostgreSQL::
+
+    osm2pgsql -d hackdatapaca -p osm -E 3857 -U gba -P 5433 -H localhost culte.osm
+
+Post-traitement directement dans la base, via ``psql``::
+
+    CREATE TABLE culte (
+        id bigint PRIMARY KEY,
+        nom varchar,
+        religion varchar,
+        geom geometry(Point, 3857));
+    INSERT INTO culte
+        SELECT osm_id, name, religion, way
+        FROM osm_point
+        WHERE religion IS NOT NULL;
+    INSERT INTO culte
+        SELECT osm_id, name, religion, ST_Centroid(way)
+        FROM osm_polygon
+        WHERE religion IS NOT NULL;
+    DROP TABLE osm_point;
+    DROP TABLE osm_polygon;
+    DROP TABLE osm_line;
+    DROP TABLE osm_roads;
+
 Intégration des données vélos
 -----------------------------
 
