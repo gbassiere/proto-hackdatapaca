@@ -121,6 +121,13 @@ Bibliothèques tierces
     tar zxf OpenLayers-2.12.tar.gz
     rm OpenLayers-2.12.tar.gz
 
+Configuration du serveur HTTP
+-----------------------------
+
+Choisissez un serveur HTTP (Apache, Nginx, ...) et configurez-le pour :
+
+* Servir à la racine les fichiers statiques du répertoire ``web``.
+* Rediriger ``/geoserver`` vers ``http://localhost:8080/geoserver`` (proxy).
 
 Lancer le bouzin
 ================
@@ -129,5 +136,5 @@ Lancer le bouzin
 
     cd $PROJECTDIR
     ./tomcat_instance/bin/startup.sh
-    cd web/
-    python -m SimpleHTTPServer
+
+Lancez aussi le serveur HTTP que vous avez choisi, évidemment.
