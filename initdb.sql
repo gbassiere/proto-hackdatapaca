@@ -56,7 +56,8 @@ BEGIN
         CASE WHEN ec4_ok = 1 THEN ec4_val ELSE 0 END +
         CASE WHEN cum_ok = 1 THEN cum_val ELSE 0 END +
         CASE WHEN cuc_ok = 1 THEN cuc_val ELSE 0 END +
-        CASE WHEN cuj_ok = 1 THEN cuj_val ELSE 0 END;
+        CASE WHEN cuj_ok = 1 THEN cuj_val ELSE 0 END +
+        CASE WHEN vel_ok = 1 THEN vel_val ELSE 0 END;
     RETURN (total/coef)::smallint;
 END;
 $$ LANGUAGE plpgsql;
