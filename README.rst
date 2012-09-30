@@ -5,7 +5,7 @@ Contributeurs
 * Gilles Bassière
 * Grégory Colpart
 * Mathilde Dioudonnat
-* Romaric Seglat
+* Romaric Segla
 * Vaidotas Zinkevicius
 
 Installation
