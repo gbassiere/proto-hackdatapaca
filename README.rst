@@ -47,8 +47,10 @@ Serveur carto (installation)
 
 :code:
 
-    PROJECTDIR=ou/tu/veux/
-    cd $PROJECTDIR
+    cd /ou/tu/veux/
+    git clone git://github.com/gbassiere/proto-hackdatapaca.git
+    cd proto-hackdatapaca
+    PROJECTDIR=`pwd`
     tomcat6-instance-create tomcat_instance
     cd tomcat_instance/webapps/
     wget http://downloads.sourceforge.net/geoserver/geoserver-2.2-war.zip
