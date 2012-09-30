@@ -28,10 +28,19 @@ Préparer la base de données
 
 :code:
 
-    createdb hackdatapaca
-    psql -d hackdatapaca -c "CREATE EXTENSION postgis;"
+    sudo -s -u postgres
+    createuser -dSR oss
+    psql -c "ALTER ROLE oss PASSWORD 'oss'"
+    createdb -O oss hackdatapaca
+    psql -d hackdatapaca -f /usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql
+    psql -d hackdatapaca -f /usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql
     psql -d hackdatapaca -f initdb.sql
     psql -d hackdatapaca -f data.sql
+    psql -d hackdatapaca -c "ALTER TABLE geometry_columns OWNER TO oss"
+    psql -d hackdatapaca -c "ALTER TABLE spatial_ref_sys OWNER TO oss"
+    psql -d hackdatapaca -c "ALTER VIEW geography_columns OWNER TO oss"
+    psql -d hackdatapaca -c "ALTER TABLE grid OWNER TO oss"
+    exit
 
 Serveur carto (installation)
 ----------------------------
@@ -81,8 +90,8 @@ Créer un entrepôt de type PostGIS avec les paramètres suivants :
 * host : ``localhost``
 * port : ``5432``
 * database : ``hackdatapaca``
-* user : celui que vous avez configuré
-* password : celui que vous avez configuré
+* user : ``oss``
+* password : ``oss``
 
 Normalement, après cette étape, GeoServer vous amène directement sur le
 formulaire pour créer une couche dans cet entrepôt :
