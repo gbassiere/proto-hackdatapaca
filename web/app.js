@@ -16,7 +16,7 @@ function init() {
     map.addLayer(new OpenLayers.Layer.OSM('Fond de plan'));
     grid_layer = new OpenLayers.Layer.WMS(
         'Grille',
-        'http://localhost:8080/geoserver/ows',
+        '/geoserver/ows',
         {layers: 'hdp:grid', transparent: true},
         {visibility: false}
     )
