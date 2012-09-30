@@ -1,3 +1,4 @@
+-- Créer le schéma de la grille de visualisation
 CREATE TABLE grid (
     id serial PRIMARY KEY,
     cell geometry(Polygon, 3857) NOT NULL,
@@ -10,6 +11,7 @@ CREATE TABLE grid (
     culte_ju smallint DEFAULT 0
 );
 
+-- Créer les cellules de la grille de visualisation (couvrant Marseille avec une maille de 500m)
 DO LANGUAGE plpgsql $$
 DECLARE
     xmin integer := 587000;
@@ -35,3 +37,25 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+-- Fonction facilitant l'écriture de la requête de visualisation
+CREATE OR REPLACE FUNCTION get_cell_value(ec1_val smallint, ec2_val smallint, ec3_val smallint, ec4_val smallint, cum_val smallint, cuc_val smallint, cuj_val smallint, ec1_ok integer, ec2_ok integer, ec3_ok integer, ec4_ok integer, cum_ok integer, cuc_ok integer, cuj_ok integer) RETURNS smallint AS $$
+DECLARE
+    total integer;
+    coef integer;
+BEGIN
+    coef := ec1_ok + ec2_ok + ec3_ok + ec4_ok + cum_ok + cuc_ok + cum_ok;
+    IF coef = 0 THEN
+        RETURN 0;
+    END IF;
+    total :=
+        CASE WHEN ec1_ok = 1 THEN ec1_val ELSE 0 END +
+        CASE WHEN ec2_ok = 1 THEN ec2_val ELSE 0 END +
+        CASE WHEN ec3_ok = 1 THEN ec3_val ELSE 0 END +
+        CASE WHEN ec4_ok = 1 THEN ec4_val ELSE 0 END +
+        CASE WHEN cum_ok = 1 THEN cum_val ELSE 0 END +
+        CASE WHEN cuc_ok = 1 THEN cuc_val ELSE 0 END +
+        CASE WHEN cuj_ok = 1 THEN cuj_val ELSE 0 END;
+    RETURN (total/coef)::smallint;
+END;
+$$ LANGUAGE plpgsql;
