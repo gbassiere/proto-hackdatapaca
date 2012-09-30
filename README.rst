@@ -30,6 +30,8 @@ Préparer la base de données
 
     createdb hackdatapaca
     psql -d hackdatapaca -c "CREATE EXTENSION postgis;"
+    psql -d hackdatapaca -f initdb.sql
+    psql -d hackdatapaca -f data.sql
 
 Serveur carto (installation)
 ----------------------------
@@ -43,6 +45,8 @@ Serveur carto (installation)
     wget http://downloads.sourceforge.net/geoserver/geoserver-2.2-war.zip
     unzip geoserver-2.2-war.zip
     rm geoserver-2.2-war.zip
+    cd ../..
+    ./tomcat_instance/bin/startup.sh
 
 Serveur carto (configuration)
 -----------------------------
@@ -74,7 +78,7 @@ Créer une couche :
 * View name : ``grid``
 * SQL statement :
 
-    SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu,
+    SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu, velo
     culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%, %vel%)
     AS value FROM grid
 
@@ -97,8 +101,6 @@ Bibliothèques tierces
     wget http://openlayers.org/download/OpenLayers-2.12.tar.gz
     tar zxf OpenLayers-2.12.tar.gz
     rm OpenLayers-2.12.tar.gz
-
-*À faire*: build personnalisé d'OpenLayers pour économiser des Ko.
 
 
 Lancer le bouzin
