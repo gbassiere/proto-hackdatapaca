@@ -1,7 +1,7 @@
 Initialiser la grille
 ---------------------
 
-:code:
+::
 
     -- Créer les cellules de la grille de visualisation (couvrant Marseille avec une maille de 500m)
     DO LANGUAGE plpgsql $$
@@ -208,6 +208,6 @@ Post-traitement directement dans la base, via ``psql``::
 Export de la grille
 -------------------
 
-:code:
+::
 
     pg_dump -Ox -t grid -F p -f data.sql -a hackdatapaca

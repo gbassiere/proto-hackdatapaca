@@ -19,14 +19,14 @@ Prototype testé sous Ubuntu 12.04
 Paquets à installer
 -------------------
 
-:code:
+::
 
     sudo apt-get install tomcat6-user postgresql-9.1-postgis
 
 Préparer la base de données
 ---------------------------
 
-:code:
+::
 
     sudo -s -u postgres
     createuser -dSR oss
@@ -45,7 +45,7 @@ Préparer la base de données
 Serveur carto (installation)
 ----------------------------
 
-:code:
+::
 
     cd /ou/tu/veux/
     git clone git://github.com/gbassiere/proto-hackdatapaca.git
@@ -100,11 +100,11 @@ formulaire pour créer une couche dans cet entrepôt :
 
 * Cliquer sur "Configure new SQL view"
 * View name : ``grid``
-* SQL statement :
+* SQL statement:
 
-    SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu, velo
-    culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%, %vel%)
-    AS value FROM grid
+::
+
+    SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu, velo culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%, %vel%) AS value FROM grid
 
 * Cliquer sur "Guess parameters from SQL"
 * Pour tous les paramètres trouvés, indiquer ``0`` dans "Default value" et
@@ -124,7 +124,7 @@ formulaire pour créer une couche dans cet entrepôt :
 Bibliothèques tierces
 ---------------------
 
-:code:
+::
 
     cd $PROJECTDIR
     mkdir web/lib && cd web/lib
@@ -137,13 +137,13 @@ Configuration du serveur HTTP
 
 Choisissez un serveur HTTP (Apache, Nginx, ...) et configurez-le pour :
 
-* Servir à la racine les fichiers statiques du répertoire ``web``.
+* Servir à la racine les fichiers statiques du répertoire ``web/``.
 * Rediriger ``/geoserver`` vers ``http://localhost:8080/geoserver`` (proxy).
 
 Lancer le bouzin
 ================
 
-:code:
+::
 
     cd $PROJECTDIR
     ./tomcat_instance/bin/startup.sh
