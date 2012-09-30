@@ -1,14 +1,12 @@
 var map, grid_layer;
 
+var input_ids = ['ec1', 'ec2', 'ec3', 'ec4', 'cum', 'cuc', 'cuj', 'vel'];
+
 function refresh() {
     params = [];
-    params.push('ec1:' + Number($('ec1').checked));
-    params.push('ec2:' + Number($('ec2').checked));
-    params.push('ec3:' + Number($('ec3').checked));
-    params.push('ec4:' + Number($('ec4').checked));
-    params.push('cum:' + Number($('cum').checked));
-    params.push('cuc:' + Number($('cuc').checked));
-    params.push('cuj:' + Number($('cuj').checked));
+    for (var i in input_ids) {
+        params.push(input_ids[i] + ':' + Number($(input_ids[i]).checked));
+    }
     grid_layer.params['VIEWPARAMS'] = params.join(';');
     grid_layer.redraw();
 }
@@ -25,7 +23,6 @@ function init() {
     map.addLayer(grid_layer);
     map.setCenter(new OpenLayers.LonLat(601125, 5357740), 12);
 
-    var input_ids = ['ec1', 'ec2', 'ec3', 'ec4', 'cum', 'cuc', 'cuj'];
     for (var i in input_ids) {
         OpenLayers.Event.observe($(input_ids[i]), 'change', refresh);
     }

@@ -75,8 +75,8 @@ Créer une couche :
 * SQL statement :
 
     SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu,
-    culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%) AS value
-    FROM grid
+    culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%, %vel%)
+    AS value FROM grid
 
 * Cliquer sur "Guess parameters from SQL"
 * Pour tous les paramètres trouvés, indiquer ``0`` dans "Default value" et

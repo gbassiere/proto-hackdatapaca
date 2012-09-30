@@ -8,7 +8,8 @@ CREATE TABLE grid (
     ecole4 smallint DEFAULT 0,
     culte_mu smallint DEFAULT 0,
     culte_ch smallint DEFAULT 0,
-    culte_ju smallint DEFAULT 0
+    culte_ju smallint DEFAULT 0,
+    velo smallint DEFAULT 0
 );
 
 -- Créer les cellules de la grille de visualisation (couvrant Marseille avec une maille de 500m)
@@ -39,12 +40,12 @@ END;
 $$;
 
 -- Fonction facilitant l'écriture de la requête de visualisation
-CREATE OR REPLACE FUNCTION get_cell_value(ec1_val smallint, ec2_val smallint, ec3_val smallint, ec4_val smallint, cum_val smallint, cuc_val smallint, cuj_val smallint, ec1_ok integer, ec2_ok integer, ec3_ok integer, ec4_ok integer, cum_ok integer, cuc_ok integer, cuj_ok integer) RETURNS smallint AS $$
+CREATE OR REPLACE FUNCTION get_cell_value(ec1_val smallint, ec2_val smallint, ec3_val smallint, ec4_val smallint, cum_val smallint, cuc_val smallint, cuj_val smallint, vel_val smallint, ec1_ok integer, ec2_ok integer, ec3_ok integer, ec4_ok integer, cum_ok integer, cuc_ok integer, cuj_ok integer, vel_ok integer) RETURNS smallint AS $$
 DECLARE
     total integer;
     coef integer;
 BEGIN
-    coef := ec1_ok + ec2_ok + ec3_ok + ec4_ok + cum_ok + cuc_ok + cum_ok;
+    coef := ec1_ok + ec2_ok + ec3_ok + ec4_ok + cum_ok + cuc_ok + cuj_ok + vel_ok;
     IF coef = 0 THEN
         RETURN 0;
     END IF;
