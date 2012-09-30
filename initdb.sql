@@ -49,15 +49,7 @@ BEGIN
     IF coef = 0 THEN
         RETURN 0;
     END IF;
-    total :=
-        CASE WHEN ec1_ok = 1 THEN ec1_val ELSE 0 END +
-        CASE WHEN ec2_ok = 1 THEN ec2_val ELSE 0 END +
-        CASE WHEN ec3_ok = 1 THEN ec3_val ELSE 0 END +
-        CASE WHEN ec4_ok = 1 THEN ec4_val ELSE 0 END +
-        CASE WHEN cum_ok = 1 THEN cum_val ELSE 0 END +
-        CASE WHEN cuc_ok = 1 THEN cuc_val ELSE 0 END +
-        CASE WHEN cuj_ok = 1 THEN cuj_val ELSE 0 END +
-        CASE WHEN vel_ok = 1 THEN vel_val ELSE 0 END;
+    total := ec1_ok * ec1_val + ec2_ok * ec2_val + ec3_ok * ec3_val + ec4_ok * ec4_val + cum_ok * cum_val + cuc_ok * cuc_val + cuj_ok * cuj_val + vel_ok * vel_val;
     RETURN (total/coef)::smallint;
 END;
 $$ LANGUAGE plpgsql;
