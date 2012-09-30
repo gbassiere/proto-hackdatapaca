@@ -18,9 +18,8 @@ Préparer la base de données
 
 :code:
 
-    DBNAME=hackdatapaca
-    createdb $DBNAME
-    psql -d $DBNAME -c "CREATE EXTENSION postgis;"
+    createdb hackdatapaca
+    psql -d hackdatapaca -c "CREATE EXTENSION postgis;"
 
 Serveur carto (installation)
 ----------------------------
@@ -34,6 +33,49 @@ Serveur carto (installation)
     wget http://downloads.sourceforge.net/geoserver/geoserver-2.2-war.zip
     unzip geoserver-2.2-war.zip
     rm geoserver-2.2-war.zip
+
+Serveur carto (configuration)
+-----------------------------
+
+Aller sur l'interface d'administration de GeoServer, normalement sur :
+http://localhost:8080/geoserver/web/
+
+Supprimer les objets de démonstration (supprimer "espaces de travail" devraient
+suffire à détruire tout les objets en cascade).
+
+Créer un espace de travail nommé ``hdp``.
+
+Créer un entrepôt de type PostGIS avec les paramètres suivants :
+
+* espace de travail : ``hdp``
+* nom : ``hdp``
+* activé : oui
+* host : ``localhost``
+* port : ``5432``
+* database : ``hackdatapaca``
+* user : celui que vous avez configuré
+* password : celui que vous avez configuré
+
+Créer une couche :
+
+* Menu latéral : Couches > Ajouter une nouvelle ressource
+* Choisir l'entrepôt ``hdp:hdp``
+* Cliquer sur "Configure new SQL view"
+* View name : ``grid``
+* SQL statement :
+
+    SELECT id, cell, get_cell_value(ecole1, ecole2, ecole3, ecole4, culte_mu,
+    culte_ch, culte_ju, %ec1%, %ec2%, %ec3%, %ec4%, %cum%, %cuc%, %cuj%) AS value
+    FROM grid
+
+* Cliquer sur "Guess parameters from SQL"
+* Pour tous les paramètres trouvés, indiquer ``0`` dans "Default value" et
+  ``^[01]$`` dans "Validation regular expression"
+* Cliquer sur "Refresh" au dessus des attributs
+* Cocher "Identifier" pour l'attribut ``id``
+* Pour l'attribut ``cell``, indiquer le type "Polygon" et le SRID 3857
+* Bien valider en cliquant sur "Sauvegarder" sous le formulaire de la vue SQL et
+  une deuxième fois sous le formulaire du nouveau layer.
 
 Bibliothèques tierces
 ---------------------
