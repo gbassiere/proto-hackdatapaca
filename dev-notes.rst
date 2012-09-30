@@ -1,3 +1,35 @@
+Initialiser la grille
+---------------------
+
+:code:
+
+    -- Créer les cellules de la grille de visualisation (couvrant Marseille avec une maille de 500m)
+    DO LANGUAGE plpgsql $$
+    DECLARE
+        xmin integer := 587000;
+        ymin integer := 5344000;
+        xmax integer := 616000;
+        ymax integer := 5371000;
+        step integer := 500;
+        x integer;
+        y integer;
+        query text;
+    BEGIN
+        x := xmin;
+        LOOP
+            y := ymin;
+            LOOP
+                query := format('INSERT INTO grid (cell) VALUES (''SRID=3857;POLYGON((%1$s %2$s, %1$s %4$s, %3$s %4$s, %3$s %2$s, %1$s %2$s))''::geometry)', x, y, x+step, y+step);
+                EXECUTE query;
+                y := y + step;
+                EXIT WHEN y >= ymax;
+            END LOOP;
+            x := x + step;
+            EXIT WHEN x >= xmax;
+        END LOOP;
+    END;
+    $$;
+
 Intégration des données école
 -----------------------------
 
@@ -172,3 +204,10 @@ Post-traitement directement dans la base, via ``psql``::
             else 1
         end) as val FROM grid sg, velos v WHERE ST_Distance(v.geom, sg.cell) < 500 GROUP BY sg.id
     ) as sub WHERE sub.id = g.id;
+
+Export de la grille
+-------------------
+
+:code:
+
+    pg_dump -Ox -t grid -F p -f data.sql -a hackdatapaca

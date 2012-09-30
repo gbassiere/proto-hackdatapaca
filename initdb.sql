@@ -12,33 +12,6 @@ CREATE TABLE grid (
     velo smallint DEFAULT 0
 );
 
--- Créer les cellules de la grille de visualisation (couvrant Marseille avec une maille de 500m)
-DO LANGUAGE plpgsql $$
-DECLARE
-    xmin integer := 587000;
-    ymin integer := 5344000;
-    xmax integer := 616000;
-    ymax integer := 5371000;
-    step integer := 500;
-    x integer;
-    y integer;
-    query text;
-BEGIN
-    x := xmin;
-    LOOP
-        y := ymin;
-        LOOP
-            query := format('INSERT INTO grid (cell) VALUES (''SRID=3857;POLYGON((%1$s %2$s, %1$s %4$s, %3$s %4$s, %3$s %2$s, %1$s %2$s))''::geometry)', x, y, x+step, y+step);
-            EXECUTE query;
-            y := y + step;
-            EXIT WHEN y >= ymax;
-        END LOOP;
-        x := x + step;
-        EXIT WHEN x >= xmax;
-    END LOOP;
-END;
-$$;
-
 -- Fonction facilitant l'écriture de la requête de visualisation
 CREATE OR REPLACE FUNCTION get_cell_value(ec1_val smallint, ec2_val smallint, ec3_val smallint, ec4_val smallint, cum_val smallint, cuc_val smallint, cuj_val smallint, vel_val smallint, ec1_ok integer, ec2_ok integer, ec3_ok integer, ec4_ok integer, cum_ok integer, cuc_ok integer, cuj_ok integer, vel_ok integer) RETURNS smallint AS $$
 DECLARE
