@@ -211,3 +211,38 @@ Export de la grille
 ::
 
     pg_dump -Ox -t grid -F p -f data.sql -a hackdatapaca
+
+Rajouter de nouvelles données
+-----------------------------
+
+* Intégrez les données dans la base (ça dépendra du format des données, voir les
+  exemples ci-dessus).
+* Ajoutez une colonne ``xxx`` à la table ``grid``.
+* Chaque enregistrement de la table ``grid`` représente une cellule de la grille
+  de visualisation. Débrouillez vous pour calculer une valeur en 0 et 4 pour
+  le champ ``xxx`` de chaque cellule en fonction de vos données.
+* Modifiez la fonction SQL ``get_cell_value()`` (définie dans ``initdb.sql``)
+  pour y ajouter deux arguments : ``xxx_val`` et ``xxx_ok``. Modifier le corps
+  de la fonction pour intégrer ces deux arguments dans le calcul de la moyenne.
+* Au niveau de GeoServer, modifiez la "vue SQL" du layer ``grid``. Dans la
+  requête SQL, ajoutez le champ ``xxx`` à la place de l'argument ``xxx_val`` et
+  le paramètre ``%xxx%`` à la place de l'argument ``xxx_ok``. Dans la liste des
+  paramètres en dessous, ajoutez ``xxx`` avec la valeur par défaut 0 et la
+  regexp de validation ``^[01]$``.
+* Au niveau de l'interface, ajoutez une case à cocher avec l'id ``xxx`` dans le
+  fichier ``index.html`` et ajoutez ``'xxx'`` dans le tableau ``input_ids`` au
+  début du fichier ``app.js``.
+
+Faire évoluer le prototype
+--------------------------
+
+Ce prototype n'est pas pensé pour évoluer, le développement a été fait en mode
+"Quick n' Dirty" pour monter une preuve de concept en moins de 2 jours.
+
+On s'appuie énormement sur la souplesse de GeoServer pour pouvoir monter une
+application sans avoir à coder notre propre backend. Ça marche bien pour une
+preuve de concept mais ça pourrait ne pas être suffisant pour une application de
+production selon les choix d'architecture qui seront fait.
+
+Bref, ne cherchez pas à faire évoluer ces bouts de code. Réflechissez
+sereinement en repartant du début.
