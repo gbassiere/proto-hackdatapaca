@@ -39,6 +39,44 @@ Retour dans ``psql`` pour le reste du traitement ::
         ) as sub
         WHERE NOT ST_Intersects(sub.bbox, geom);
 
+    -- Attacher les données aux cellules de la grille
+    -- École maternelle
+    UPDATE grid g SET ecole1 = least(4, sub.val)
+    FROM (
+        SELECT id, sum(val) as val FROM (
+            SELECT sg.id as id, 2 as val FROM grid sg, ecole e WHERE e.nature like '%MATERNELLE%' AND ST_Within(e.geom, sg.cell)
+            UNION
+            SELECT sg.id as id, 1 as val FROM grid sg, ecole e WHERE e.nature like '%MATERNELLE%' AND NOT ST_Within(e.geom, sg.cell) AND ST_Distance(sg.cell, e.geom) < 200
+        ) as ssub GROUP BY id
+    ) as sub WHERE sub.id = g.id;
+    -- École élémentaire
+    UPDATE grid g SET ecole2 = least(4, sub.val)
+    FROM (
+        SELECT id, sum(val) as val FROM (
+            SELECT sg.id as id, 2 as val FROM grid sg, ecole e WHERE e.nature like '%ELEMENTAIRE%' AND ST_Within(e.geom, sg.cell)
+            UNION
+            SELECT sg.id as id, 1 as val FROM grid sg, ecole e WHERE e.nature like '%ELEMENTAIRE%' AND NOT ST_Within(e.geom, sg.cell) AND ST_Distance(sg.cell, e.geom) < 200
+        ) as ssub GROUP BY id
+    ) as sub WHERE sub.id = g.id;
+    -- Collège
+    UPDATE grid g SET ecole3 = least(4, sub.val)
+    FROM (
+        SELECT id, sum(val) as val FROM (
+            SELECT sg.id as id, 2 as val FROM grid sg, ecole e WHERE e.nature like '%COLLEGE%' AND ST_Within(e.geom, sg.cell)
+            UNION
+            SELECT sg.id as id, 1 as val FROM grid sg, ecole e WHERE e.nature like '%COLLEGE%' AND NOT ST_Within(e.geom, sg.cell) AND ST_Distance(sg.cell, e.geom) < 200
+        ) as ssub GROUP BY id
+    ) as sub WHERE sub.id = g.id;
+    -- Lycée
+    UPDATE grid g SET ecole4 = least(4, sub.val)
+    FROM (
+        SELECT id, sum(val) as val FROM (
+            SELECT sg.id as id, 2 as val FROM grid sg, ecole e WHERE e.nature like '%LYCEE%' AND ST_Within(e.geom, sg.cell)
+            UNION
+            SELECT sg.id as id, 1 as val FROM grid sg, ecole e WHERE e.nature like '%LYCEE%' AND NOT ST_Within(e.geom, sg.cell) AND ST_Distance(sg.cell, e.geom) < 200
+        ) as ssub GROUP BY id
+    ) as sub WHERE sub.id = g.id;
+
 Intégration des données sur les lieux de culte
 ----------------------------------------------
 
@@ -56,18 +94,50 @@ Post-traitement directement dans la base, via ``psql``::
         nom varchar,
         religion varchar,
         geom geometry(Point, 3857));
+    -- Copier les données ponctuelles
     INSERT INTO culte
         SELECT osm_id, name, religion, way
         FROM osm_point
         WHERE religion IS NOT NULL;
+    -- Copier les données surfaciques
     INSERT INTO culte
         SELECT osm_id, name, religion, ST_Centroid(way)
         FROM osm_polygon
         WHERE religion IS NOT NULL;
+    -- Nettoyer les tables osm2pgsql
     DROP TABLE osm_point;
     DROP TABLE osm_polygon;
     DROP TABLE osm_line;
     DROP TABLE osm_roads;
+
+    -- Attacher les données aux cellules de la grille
+    -- Mosquées
+    UPDATE grid g SET culte_mu = least(4, sub.val)
+    FROM (
+        SELECT sg.id as id, sum(case
+            when ST_Distance(c.geom, sg.cell) = 0 then 4
+            when ST_Distance(c.geom, sg.cell) < 500 then 2
+            else 1
+        end) as val FROM grid sg, culte c WHERE c.religion = 'muslim' AND ST_Distance(c.geom, sg.cell) < 1000 GROUP BY sg.id
+    ) as sub WHERE sub.id = g.id;
+    -- Églises
+    UPDATE grid g SET culte_ch = least(4, sub.val)
+    FROM (
+        SELECT sg.id as id, sum(case
+            when ST_Distance(c.geom, sg.cell) = 0 then 4
+            when ST_Distance(c.geom, sg.cell) < 500 then 2
+            else 1
+        end) as val FROM grid sg, culte c WHERE c.religion = 'christian' AND ST_Distance(c.geom, sg.cell) < 1000 GROUP BY sg.id
+    ) as sub WHERE sub.id = g.id;
+    -- Églises
+    UPDATE grid g SET culte_ju = least(4, sub.val)
+    FROM (
+        SELECT sg.id as id, sum(case
+            when ST_Distance(c.geom, sg.cell) = 0 then 4
+            when ST_Distance(c.geom, sg.cell) < 500 then 2
+            else 1
+        end) as val FROM grid sg, culte c WHERE c.religion = 'jewish' AND ST_Distance(c.geom, sg.cell) < 1000 GROUP BY sg.id
+    ) as sub WHERE sub.id = g.id;
 
 Intégration des données vélos
 -----------------------------
@@ -93,3 +163,12 @@ Post-traitement directement dans la base, via ``psql``::
     DROP TABLE osm_polygon;
     DROP TABLE osm_line;
     DROP TABLE osm_roads;
+
+    -- Attacher les données aux cellules de la grille
+    UPDATE grid g SET velo = least(4, sub.val)
+    FROM (
+        SELECT sg.id as id, sum(case
+            when ST_Distance(v.geom, sg.cell) = 0 then 2
+            else 1
+        end) as val FROM grid sg, velos v WHERE ST_Distance(v.geom, sg.cell) < 500 GROUP BY sg.id
+    ) as sub WHERE sub.id = g.id;
