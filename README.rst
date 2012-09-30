@@ -59,6 +59,20 @@ suffire à détruire tout les objets en cascade).
 
 Créer un espace de travail nommé ``hdp``.
 
+Charger les règles de rendu :
+
+* Menu latéral : Styles > Ajouter une nouvelle ressource
+* Cliquer sur "Ajouter un nouveau style"
+* Commencer par charger le fichier ``style.sld`` : en bas du formulaire, sous la
+  zone de texte, cliquer sur "Browse" pour le sélectionner puis sur "Charger",
+  le fichier doit alors apparaître dans la zone de texte
+* Remplissez ensuite le reste du formulaire :
+* Nom : ``gridcolors``
+* Espace de travail : ``hdp``
+* En bas du formulaire, il est important de cliquer sur "Valider" ET sur
+  "Envoyer" (le bouton "Valider" ne fait que le contôle de syntaxe, il
+  n'enregistre pas).
+
 Créer un entrepôt de type PostGIS avec les paramètres suivants :
 
 * espace de travail : ``hdp``
@@ -70,10 +84,9 @@ Créer un entrepôt de type PostGIS avec les paramètres suivants :
 * user : celui que vous avez configuré
 * password : celui que vous avez configuré
 
-Créer une couche :
+Normalement, après cette étape, GeoServer vous amène directement sur le
+formulaire pour créer une couche dans cet entrepôt :
 
-* Menu latéral : Couches > Ajouter une nouvelle ressource
-* Choisir l'entrepôt ``hdp:hdp``
 * Cliquer sur "Configure new SQL view"
 * View name : ``grid``
 * SQL statement :
@@ -88,8 +101,14 @@ Créer une couche :
 * Cliquer sur "Refresh" au dessus des attributs
 * Cocher "Identifier" pour l'attribut ``id``
 * Pour l'attribut ``cell``, indiquer le type "Polygon" et le SRID 3857
-* Bien valider en cliquant sur "Sauvegarder" sous le formulaire de la vue SQL et
-  une deuxième fois sous le formulaire du nouveau layer.
+* Valider la source de données SQL en cliquant sur "Sauvegarder", ça doit
+  vous ramener dans le formulaire de création du layer
+* Dans l'onglet "Données", indiquer le nom ``grid`` puis, dans la section
+  "Emprises", cliquer sur "Basées sur les données" et "Calculées sur les
+  emprises natives"
+* Dans l'onglet "Publication", choisir ``gridcolors`` pour le "style par
+  défaut".
+* En bas du formulaire, cliquer sur "Sauvegarder"
 
 Bibliothèques tierces
 ---------------------
