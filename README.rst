@@ -1,12 +1,12 @@
 Contributeurs
 =============
 
-* Antoine
-* Gilles
-* Grégory
-* Mathilde
-* Romaric
-* Zink
+* Antoine Guyon
+* Gilles Bassière
+* Grégory Colpart
+* Mathilde Dioudonnat
+* Romaric Seglat
+* Vaidotas Zinkevicius
 
 Installation
 ============
