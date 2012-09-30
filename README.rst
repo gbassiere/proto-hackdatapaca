@@ -1,3 +1,13 @@
+Contributeurs
+=============
+
+* Antoine
+* Gilles
+* Grégory
+* Mathilde
+* Romaric
+* Zink
+
 Installation
 ============
 
