@@ -1,8 +1,8 @@
-body {margin: 0; padding: 0; background-color: #ddd;}
+body {margin: 0; padding: 0;}
 
 /* Layout */
-#header {position: absolute; top: 2px; right: 2px; left: 2px; height: 60px; background-color: #fff;}
-#sidebar {position: absolute; top: 66px; bottom: 26px; left: 2px; width: 300px; background-color: #fff;}
+#header {position: absolute; top: 2px; right: 2px; left: 306px; height: 60px; background-color: #fff;}
+#sidebar {position: absolute; top: 2px; bottom: 26px; left: 2px; width: 300px; background-color: #fff;}
 #map {position: absolute; top: 66px; right: 2px; left: 306px; bottom: 26px; background-color: #fff;}
 #footer {position: absolute; bottom: 2px; right: 2px; left: 2px; height: 20px; background-color: #fff;}
 
