@@ -1,7 +1,6 @@
 -- Créer le schéma de la grille de visualisation
 CREATE TABLE grid (
     id serial PRIMARY KEY,
-    cell geometry(Polygon, 3857) NOT NULL,
     ecole1 smallint DEFAULT 0,
     ecole2 smallint DEFAULT 0,
     ecole3 smallint DEFAULT 0,
@@ -11,6 +10,8 @@ CREATE TABLE grid (
     culte_ju smallint DEFAULT 0,
     velo smallint DEFAULT 0
 );
+
+SELECT AddGeometryColumn('grid', 'cell', 3857, 'POLYGON', 2);
 
 -- Fonction facilitant l'écriture de la requête de visualisation
 CREATE OR REPLACE FUNCTION get_cell_value(ec1_val smallint, ec2_val smallint, ec3_val smallint, ec4_val smallint, cum_val smallint, cuc_val smallint, cuj_val smallint, vel_val smallint, ec1_ok integer, ec2_ok integer, ec3_ok integer, ec4_ok integer, cum_ok integer, cuc_ok integer, cuj_ok integer, vel_ok integer) RETURNS smallint AS $$
