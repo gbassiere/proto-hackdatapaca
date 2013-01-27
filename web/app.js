@@ -1,3 +1,9 @@
+/* Copyright © 2012 Gilles Bassière
+ * This work is free. You can redistribute it and/or modify it under the
+ * terms of the Do What The Fuck You Want To Public License, Version 2,
+ * as published by Sam Hocevar. See the COPYING file for more details.
+ */
+
 var map, grid_layer;
 
 var input_ids = ['ec1', 'ec2', 'ec3', 'ec4', 'cum', 'cuc', 'cuj', 'vel'];
